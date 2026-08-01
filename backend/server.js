@@ -1,7 +1,19 @@
-import Express from "express";
+import app from "./src/app.js";
+import dbConnected from "./src/config/db.config.js";
 
-const app = Express();
+const PORT = process.env.PORT || 5000;
 
-app.listen(4000, () => {
-  console.log("server is running");
-});
+async function serverStart() {
+  try {
+    await dbConnected();
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+}
+
+serverStart();

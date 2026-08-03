@@ -9,12 +9,12 @@ export const findUserByEmail = async (email) => {
 };
 
 export const findUserByUsername = async (username) => {
-  return await User.findOne({ username });
+  return await User.findOne({ username }).select("+password");
 };
 
-export const findUser = async (identifier) => {
+export const findUser = async (username, email) => {
   return await User.findOne({
-    $or: [{ username: identifier }, { email: identifier.toLowerCase() }],
+    $or: [{ username }, { email: email.toLowerCase() }],
   });
 };
 
@@ -43,4 +43,8 @@ export const removeRefreshToken = async (id) => {
     { $unset: { refreshToken: 1 } },
     { new: true },
   );
+};
+
+export const saveUser = async (user) => {
+  return await user.save();
 };

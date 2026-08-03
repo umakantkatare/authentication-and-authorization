@@ -1,21 +1,19 @@
+import { cookieOptions } from "../config/cookie.config.js";
+import {
+  loginService,
+  logoutService,
+  profileService,
+  registerService,
+} from "../services/auth.service.js";
+
 const register = async (req, res) => {
   try {
-    const { username, name, email, password } = req.body;
-    if (!username || !name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
+    const user = await registerService(req.body);
+
     res.status(201).json({
       success: true,
       message: "user registered successfully!",
-      data: {
-        username,
-        name,
-        email,
-        password,
-      },
+      data: user,
     });
   } catch (error) {
     res.status(500).json({
@@ -27,21 +25,29 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const user = await loginService(req.body);
 
-    if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
+    res.cookie("accessToken", user.accessToken, cookieOptions);
     res.status(200).json({
       success: true,
       message: "user login successfully!",
-      data: {
-        username,
-        password,
-      },
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const profile = async (req, res) => {
+  try {
+    const user = await profileService(req.user._id);
+
+    res.status(200).json({
+      success: true,
+      data: user,
     });
   } catch (error) {
     res.status(500).json({
@@ -53,7 +59,9 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    res.status(200).json({
+    await logoutService(req.user._id);
+
+    res.clearCookie("accessToken", cookieOptions).status(200).json({
       success: true,
       message: "user logout successfully!",
     });
@@ -65,4 +73,4 @@ const logout = async (req, res) => {
   }
 };
 
-export { register, login, logout };
+export { register, login, profile, logout };

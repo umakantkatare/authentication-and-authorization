@@ -12,9 +12,13 @@ export const findUserByUsername = async (username) => {
   return await User.findOne({ username }).select("+password");
 };
 
-export const findUser = async (username, email) => {
+export const findUser = async (username, email,googleId) => {
   return await User.findOne({
-    $or: [{ username }, { email: email.toLowerCase() }],
+    $or: [
+      { username },
+      { email: email.toLowerCase() },
+      { googleId: profile.id },
+    ],
   });
 };
 

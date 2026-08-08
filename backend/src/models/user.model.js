@@ -4,7 +4,6 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
       unique: true,
       trim: true,
       minlength: [6, "Username should be at least 6 characters long"],
@@ -24,9 +23,14 @@ const userSchema = new Schema(
       trim: true,
     },
 
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+
     password: {
       type: String,
-      required: true,
       minlength: [5, "Password must be at least 5 characters long"],
       select: false,
     },

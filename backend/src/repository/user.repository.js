@@ -12,15 +12,25 @@ export const findUserByUsername = async (username) => {
   return await User.findOne({ username }).select("+password");
 };
 
-export const findUser = async (username, email,googleId) => {
-  return await User.findOne({
+export const findUser = async (username, email, profile) => {
+  return User.findOne({
     $or: [
-      { username },
-      { email: email.toLowerCase() },
-      { googleId: profile.id },
+      ...(username ? [{ username }] : []),
+      ...(email ? [{ email }] : []),
+      ...(profile?.id ? [{ googleId: profile.id }] : []),
     ],
-  });
+  }).select("+password");
 };
+
+// export const findUser = async (username, email, profile) => {
+//   return await User.findOne({
+//     $or: [
+//       { username },
+//       { email },
+//       { googleId: profile.id },
+//     ],
+//   }).select("+password");
+// };
 
 export const createUser = async (userData) => {
   return await User.create(userData);

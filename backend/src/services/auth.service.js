@@ -34,13 +34,17 @@ const registerService = async (user) => {
 };
 
 const loginService = async (data) => {
-  const { username, password } = data;
+  console.log("data:", data);
+  const { email, password } = data;
+  console.log("user data:", email, password);
 
-  if (!username || !password) {
+  if (!email || !password) {
     throw new Error("All fields are required");
   }
 
-  const user = await findUserByUsername(username);
+  // const user = await findUser(email);
+  const user = await User.findOne({ email: email }).select("+password");
+  console.log("user:", user);
 
   if (!user) {
     throw new Error("User does not exists");

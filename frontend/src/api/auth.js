@@ -6,4 +6,9 @@ const login = (data) => {
   });
 };
 
-export { login };
+const signup = async (data) => {
+  return axios.post(`${import.meta.env.VITE_BASEURL}/users/register`, data, {
+    withCredentials: true,
+  });
+};
+export { login,signup };

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  googleCallback,
   login,
   logout,
   profile,
@@ -7,7 +8,7 @@ import {
 } from "../controllers/auth.controller.js";
 
 import protectedMiddleware from "./../middlewares/auth.middleware.js";
-import passport from './../config/passport.config.js';
+import passport from "./../config/passport.config.js";
 
 const route = Router();
 
@@ -28,15 +29,7 @@ route.get(
   passport.authenticate("google", {
     session: false,
   }),
-  (req, res) => {
-    console.log("Google User:", req.user);
-
-    res.json({
-      success: true,
-      message: "Google login successful",
-      user: req.user,
-    });
-  },
+  googleCallback,
 );
 
 export default route;

@@ -41,6 +41,18 @@ const login = async (req, res) => {
   }
 };
 
+const googleCallback = async (req, res) => {
+  try {
+    const user = req.user;
+
+    return res.redirect(`http://localhost:5173/`);
+  } catch (error) {
+    console.error(error);
+
+    return res.redirect(`http://localhost:5173/login?error=google_auth_failed`);
+  }
+};
+
 const profile = async (req, res) => {
   try {
     const user = await profileService(req.user._id);
@@ -73,4 +85,4 @@ const logout = async (req, res) => {
   }
 };
 
-export { register, login, profile, logout };
+export { register, login, googleCallback, profile, logout };

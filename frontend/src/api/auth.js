@@ -11,4 +11,10 @@ const signup = async (data) => {
     withCredentials: true,
   });
 };
-export { login,signup };
+const google = async () => {
+  // return axios.post(window.location.href = `${import.meta.env.VITE_BASEURL}/users/google`);
+  return axios.post(
+    window.open(`${import.meta.env.VITE_BASEURL}/users/google`, "_self"),
+  );
+};
+export { login, signup, google };
